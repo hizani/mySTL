@@ -123,6 +123,12 @@ namespace mySTL
 			return false;
 		}
 
+        void clear()
+		{
+			delete root_;
+			root_ = nullptr;
+		}
+
         protected:
         struct node_
 		{
