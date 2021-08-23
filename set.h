@@ -110,6 +110,13 @@ namespace mySTL
 				continue;
 			}
 		}
+        
+        bool contains(const T& key)
+		{
+			if (find(key) != nullptr)
+				return true;
+			return false;
+		}
 
         protected:
         struct node_

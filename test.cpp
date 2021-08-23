@@ -14,5 +14,8 @@ int main()
     mset->insert(12);
     mset->insert(11);
     mset->insert(5);
+    
     mset->find(4);
+    
+    mset->contains(12);
 }
