@@ -150,6 +150,12 @@ namespace mySTL
 
 		node_* root_ = nullptr;
     };
+
+    template <typename T>
+	class set : public multiset<T>
+	{
+            
+	};
 }
 
 #endif

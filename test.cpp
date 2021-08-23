@@ -2,6 +2,7 @@
 
 int main()
 {
+    //multiset
     mySTL::multiset<int>* mset = new mySTL::multiset<int>();
     
     int a = 23;
@@ -19,4 +20,6 @@ int main()
 
     mset->contains(12);
 
+    //set
+    
 }
