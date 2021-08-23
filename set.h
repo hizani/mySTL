@@ -154,7 +154,72 @@ namespace mySTL
     template <typename T>
 	class set : public multiset<T>
 	{
-            
+        public:
+		virtual void insert(T& key) override
+		{
+			if (!multiset<T>::root_) {
+				multiset<T>::root_ = new typename multiset<T>::node_();
+				multiset<T>::root_->key = key;
+				return;
+			}
+
+			typename multiset<T>::node_* parent = nullptr;
+			typename multiset<T>::node_** node = &(multiset<T>::root_);
+			while (true) {
+				if (!(*node)) {
+					*node = new typename multiset<T>::node_();
+					(*node)->key = key;
+					(*node)->parent = parent;
+					return;
+				}
+
+				if (key <= (*node)->key) {
+					return;
+				}
+
+				if (key < (*node)->key) {
+					parent = *node;
+					node = &((*node)->left_node);
+					continue;
+				}
+				parent = *node;
+				node = &((*node)->right_node);
+				continue;
+			}
+		}
+
+		virtual void insert(T&& key) override
+		{
+			if (!multiset<T>::root_) {
+				multiset<T>::root_ = new typename multiset<T>::node_();
+				multiset<T>::root_->key = key;
+				return;
+			}
+
+			typename multiset<T>::node_* parent = nullptr;
+			typename multiset<T>::node_** node = &(multiset<T>::root_);
+			while (true) {
+				if (!(*node)) {
+					*node = new typename multiset<T>::node_();
+					(*node)->key = key;
+					(*node)->parent = parent;
+					return;
+				}
+
+				if (key == (*node)->key) {
+					return;
+				}
+
+				if (key < (*node)->key) {
+					parent = *node;
+					node = &((*node)->left_node);
+					continue;
+				}
+				parent = *node;
+				node = &((*node)->right_node);
+				continue;
+			}
+		}            
 	};
 }
 

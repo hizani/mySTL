@@ -21,5 +21,19 @@ int main()
     mset->contains(12);
 
     //set
+    mySTL::set<int>* set = new mySTL::set<int>();
+
+    set->insert(a);
+    set->insert(b);
+    set->insert(4);
+    set->insert(45);
+    set->insert(12);
+    set->insert(11);
+    set->insert(5);
+    
+    set->find(4);
+
+    set->contains(12);
+
     
 }
