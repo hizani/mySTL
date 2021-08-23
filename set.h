@@ -9,6 +9,11 @@ namespace mySTL
         public:
 		multiset() {};
 
+        ~multiset()
+		{
+			delete root_;
+		}
+
         virtual void insert(T& key)
 		{
 			if (!root_) {
@@ -126,6 +131,14 @@ namespace mySTL
 			node_* left_node;
 			node_* right_node;
 			node_* parent;
+
+            ~node_()
+			{
+				if (left_node)
+					delete left_node;
+				if (right_node)
+					delete right_node;
+			}
 		};
 
 
