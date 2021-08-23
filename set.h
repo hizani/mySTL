@@ -67,6 +67,50 @@ namespace mySTL
 			}
 		}
 
+        		T* find(const T& key)
+		{
+			node_* node = root_;
+			while (true) {
+				if (!node) {
+					return nullptr;
+				}
+
+				if (node->key == key) {
+					return &(node->key);
+				}
+
+				if (key <= node->key) {
+					node = node->left_node;
+					continue;
+				}
+
+				node = node->right_node;
+				continue;
+			}
+		}
+
+		T* find(const T&& key)
+		{
+			node_* node = root_;
+			while (true) {
+				if (!node) {
+					return nullptr;
+				}
+
+				if (node->key == key) {
+					return &(node->key);
+				}
+
+				if (key <= node->key) {
+					node = node->left_node;
+					continue;
+				}
+
+				node = node->right_node;
+				continue;
+			}
+		}
+
         protected:
         struct node_
 		{
