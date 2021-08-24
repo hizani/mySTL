@@ -129,6 +129,56 @@ namespace mySTL
 			root_ = nullptr;
 		}
 
+        void remove(const T& key)
+		{
+			node_* node = root_;
+			node_** parents_pointer_to_node = &root_;
+			while (true) {
+				if (!node) {
+					return;
+				}
+
+				if (node->key == key) {
+					remove_node(node, parents_pointer_to_node);
+					return;
+				}
+
+				if (key <= node->key) {
+					parents_pointer_to_node = &node->left_node;
+					node = node->left_node;
+					continue;
+				}
+
+				parents_pointer_to_node = &node->right_node;
+				node = node->right_node;
+			}
+		}
+
+		void remove(const T&& key)
+		{
+			node_* node = root_;
+			node_** parents_pointer_to_node = &root_;
+			while (true) {
+				if (!node) {
+					return;
+				}
+
+				if (node->key == key) {
+					remove_node(node, parents_pointer_to_node);
+					return;
+				}
+
+				if (key <= node->key) {
+					parents_pointer_to_node = &node->left_node;
+					node = node->left_node;
+					continue;
+				}
+
+				parents_pointer_to_node = &node->right_node;
+				node = node->right_node;
+			}
+		}
+
         protected:
         struct node_
 		{
@@ -149,6 +199,46 @@ namespace mySTL
 
 
 		node_* root_ = nullptr;
+        
+        void remove_node(node_* node, node_** parents_pointer_to_node)
+		{
+			while (true)
+			{
+				// The node has no children
+				if (!node->left_node && !node->right_node) {
+					*parents_pointer_to_node = nullptr;
+					delete node;
+					return;
+				}
+				// The node has left child
+				if (node->left_node != nullptr && !node->right_node) {
+					*parents_pointer_to_node = node->left_node;
+					node->left_node = nullptr;
+					delete node;
+					return;
+				}
+				// The node has right child
+				if (node->right_node != nullptr && !node->left_node) {
+					*parents_pointer_to_node = node->right_node;
+					node->right_node = nullptr;
+					delete node;
+					return;
+				}
+				// The node has two children
+				if (node->left_node != nullptr && node->right_node != nullptr) {
+					parents_pointer_to_node = &node->left_node;
+					node_* child = node->left_node;
+					while (child->right_node != nullptr) {
+						parents_pointer_to_node = &child->right_node;
+						child = child->right_node;
+					}
+					node->key = child->key;
+					node = child;
+					continue;
+				}
+			}
+		}
+        
     };
 
     template <typename T>
