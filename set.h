@@ -263,7 +263,7 @@ namespace mySTL
 					return;
 				}
 
-				if (key <= (*node)->key) {
+				if (key == (*node)->key) {
 					return;
 				}
 
