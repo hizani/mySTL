@@ -2,40 +2,38 @@
 
 int main()
 {
-    //multiset
-    mySTL::multiset<int>* mset = new mySTL::multiset<int>();
-    
-    int a = 22;
-    int b = 11;
-    
-    mset->insert(a);
-	mset->insert(b);
-	mset->insert(12);
-	mset->insert(44);
-	mset->insert(55);
-	mset->insert(2);
-	mset->remove(a);
-	mset->remove(11);
-	mset->remove(2);
-    
-    mset->find(4);
+	int num1 = 22;
+	int num2 = 11;
+	mySTL::multiset<int>* m = new mySTL::multiset<int>();
+	m->insert(num1);
+	m->insert(num2);
+	m->insert(14);
+	m->insert(33);
+	m->insert(48);
+	m->insert(2);
+	m->insert(12);
+	m->insert(44);
+	m->insert(76);
+	m->insert(2);
+	m->insert(28);
+	m->insert(44);
+	m->insert(55);
+	m->insert(2);
+	//m->remove(num1);
+	//m->remove(11);
+	m->remove(14);
+	auto p = m->find(2);
 
-    mset->contains(12);
+	m->clear();
+	m->insert(22);
 
-    //set
-    mySTL::set<int>* set = new mySTL::set<int>();
+	mySTL::set<int>* s = new mySTL::set<int>();
+	s->insert(1);
+	s->insert(15);
+	s->insert(18);
+	s->insert(22);
+	s->insert(3);
+	s->insert(3);
 
-    set->insert(a);
-    set->insert(b);
-    set->insert(4);
-    set->insert(45);
-    set->insert(12);
-    set->insert(11);
-    set->insert(5);
-    
-    set->find(4);
-
-    set->contains(12);
-
-    
+	delete s;
 }
