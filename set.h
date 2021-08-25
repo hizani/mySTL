@@ -16,19 +16,21 @@ namespace mySTL
 
         virtual void insert(T& key)
 		{
-			if (!root_) {
-				root_ = new node_();
-				root_->key = key;
+			if (!this->root_) {
+				this->root_ = new node_();
+				this->root_->key = key;
+				this->root_->color = BLACK;
 				return;
 			}
 
 			node_* parent = nullptr;
-			node_** node = &root_;
+			node_** node = &this->root_;
 			while (true) {
 				if (!(*node)) {
 					*node = new node_();
 					(*node)->key = key;
 					(*node)->parent = parent;
+					fix_insert(*node);
 					return;
 				}
 
@@ -39,25 +41,26 @@ namespace mySTL
 				}
 				parent = *node;
 				node = &((*node)->right_node);
-				continue;
 			}
 		}
 
 		virtual void insert(T&& key)
 		{
-			if (!root_) {
-				root_ = new node_();
-				root_->key = key;
+			if (!this->root_) {
+				this->root_ = new node_();
+				this->root_->key = key;
+				this->root_->color = BLACK;
 				return;
 			}
 
 			node_* parent = nullptr;
-			node_** node = &root_;
+			node_** node = &this->root_;
 			while (true) {
 				if (!(*node)) {
 					*node = new node_();
 					(*node)->key = key;
 					(*node)->parent = parent;
+					fix_insert(*node);
 					return;
 				}
 
@@ -68,11 +71,10 @@ namespace mySTL
 				}
 				parent = *node;
 				node = &((*node)->right_node);
-				continue;
 			}
 		}
 
-        		T* find(const T& key)
+        T* find(const T& key)
 		{
 			node_* node = root_;
 			while (true) {
@@ -180,7 +182,14 @@ namespace mySTL
 		}
 
         protected:
-        struct node_
+
+		enum color_
+		{
+			BLACK,
+			RED
+		};
+
+		struct node_
 		{
 			T key;
 
@@ -188,19 +197,27 @@ namespace mySTL
 			node_* right_node;
 			node_* parent;
 
-            ~node_()
+			~node_()
 			{
 				if (left_node)
 					delete left_node;
 				if (right_node)
 					delete right_node;
 			}
+
+			color_ color = RED;
 		};
 
-
 		node_* root_ = nullptr;
-        
-        void remove_node(node_* node, node_** parents_pointer_to_node)
+
+		bool is_red(node_* node)
+		{
+			if (node != nullptr && node->color == RED)
+				return true;
+			return false;
+		}
+
+		void remove_node(node_* node, node_** parents_pointer_to_node)
 		{
 			while (true)
 			{
@@ -238,8 +255,137 @@ namespace mySTL
 				}
 			}
 		}
-        
-    };
+
+		node_* get_grandparent(node_* node)
+		{
+			return node->parent->parent;
+		}
+
+		node_* get_uncle(node_* node)
+		{
+			node_* grandparent = get_grandparent(node);
+			if (grandparent->left_node == node->parent)
+				return grandparent->right_node;
+			return grandparent->left_node;
+		}
+
+		void flip_color(node_* node)
+		{
+			if (!node)
+				return;
+			if (is_red(node))
+			{
+				node->color = BLACK;
+				return;
+			}
+			node->color = RED;
+		}
+
+		bool is_root(node_* node)
+		{
+			if (node == root_) {
+				return true;
+			}
+			return false;
+		}
+
+		void rotate_left(node_* node)
+		{
+			node_* node_to_rotate = node->right_node;
+			node->right_node = node_to_rotate->left_node;
+			if (node_to_rotate->left_node != nullptr) {
+				node_to_rotate->left_node->parent = node;
+			}
+			node_to_rotate->parent = node->parent;
+			if (node->parent == nullptr) {
+				this->root_ = node_to_rotate;
+			}
+			else if (node == node->parent->left_node) {
+				node->parent->left_node = node_to_rotate;
+			}
+			else {
+				node->parent->right_node = node_to_rotate;
+			}
+
+			node_to_rotate->left_node = node;
+			node->parent = node_to_rotate;
+		}
+
+		void rotate_right(node_* node)
+		{
+			node_* node_to_rotate = node->left_node;
+			node->left_node = node_to_rotate->right_node;
+			if (node_to_rotate->right_node != nullptr) {
+				node_to_rotate->right_node->parent = node;
+			}
+			node_to_rotate->parent = node->parent;
+			if (node->parent == nullptr) {
+				this->root_ = node_to_rotate;
+			}
+			else if (node == node->parent->right_node) {
+				node->parent->right_node = node_to_rotate;
+			}
+			else {
+				node->parent->left_node = node_to_rotate;
+			}
+
+			node_to_rotate->right_node = node;
+			node->parent = node_to_rotate;
+		}
+
+		void fix_insert(node_* node)
+		{
+			node_* uncle;
+			node_* grandparent;
+			while (is_red(node->parent)) {
+				uncle = get_uncle(node);
+				grandparent = get_grandparent(node);
+
+				if (is_red(uncle)) {
+					flip_color(uncle);
+					flip_color(node->parent);
+					flip_color(grandparent);
+					node = grandparent;
+
+					if (is_root(node)) break;
+					continue;
+				}
+
+				// Parent is right child of grandparent
+
+				if (node->parent == grandparent->right_node) {
+					if (node == node->parent->left_node) {
+						node = node->parent;
+						//grandparent = get_grandparent(node);
+						rotate_right(node);
+					}
+
+					flip_color(node->parent);
+					flip_color(grandparent);
+					rotate_left(grandparent);
+
+					if (is_root(node)) break;
+					continue;
+				}
+
+				// Parent is left child of grandparent
+
+				if (node == node->parent->right_node) {
+					node = node->parent;
+					//grandparent = get_grandparent(node);
+					rotate_left(node);
+				}
+
+				flip_color(node->parent);
+				flip_color(grandparent);
+				rotate_right(grandparent);
+
+				if (is_root(node)) break;
+				continue;
+			}
+			root_->color = BLACK;
+		}
+	};
 
     template <typename T>
 	class set : public multiset<T>
