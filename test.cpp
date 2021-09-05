@@ -1,5 +1,6 @@
 #include "set.h"
-
+#include <iostream>
+//#include "map.h"
 int main()
 {
 	int num1 = 22;
@@ -19,13 +20,15 @@ int main()
 	m->insert(44);
 	m->insert(55);
 	m->insert(2);
-	//m->remove(num1);
-	//m->remove(11);
+	m->remove(num1);
+	
 	m->remove(14);
 	auto p = m->find(2);
 
 	m->clear();
 	m->insert(22);
+
+	delete m;
 
 	mySTL::set<int>* s = new mySTL::set<int>();
 	s->insert(1);
@@ -36,4 +39,7 @@ int main()
 	s->insert(3);
 
 	delete s;
+
+	//mySTL::multimap<int, int>* map = new mySTL::multimap<int, int>();
+	//map->insert(1,2);
 }
