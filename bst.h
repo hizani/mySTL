@@ -7,48 +7,6 @@ namespace mySTL
     class bst
     {
     public:
-        K* find(const K& key)
-		{
-			node_* node = this->root_;
-			while (true) {
-				if (node == LEAF) {
-					return nullptr;
-				}
-
-				if (node->key == key) {
-					return &(node->key);
-				}
-
-				if (key <= node->key) {
-					node = node->left_node;
-					continue;
-				}
-
-				node = node->right_node;
-			}
-		}
-
-		K* find(const K&& key)
-		{
-			node_* node = this->root_;
-			while (true) {
-				if (node == LEAF) {
-					return nullptr;
-				}
-
-				if (node->key == key) {
-					return &(node->key);
-				}
-
-				if (key <= node->key) {
-					node = node->left_node;
-					continue;
-				}
-
-				node = node->right_node;
-			}
-		}
-
 		bool contains(const K& key)
 		{
 			if (find(key) != nullptr)
@@ -152,6 +110,27 @@ namespace mySTL
         
 		node_* root_;
 		node_* LEAF;
+
+		node_* find(const K& key)
+		{
+			node_* node = this->root_;
+			while (true) {
+				if (node == LEAF) {
+					return nullptr;
+				}
+
+				if (node->key == key) {
+					return &(*node);
+				}
+
+				if (key <= node->key) {
+					node = node->left_node;
+					continue;
+				}
+
+				node = node->right_node;
+			}
+		}
 
 		bool is_red(node_* node)
 		{
