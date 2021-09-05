@@ -15,7 +15,7 @@ namespace mySTL
 
     public:
 
-		void insert(T& key)
+		void insert(const T& key)
 		{
 			if (this->root_ == this->LEAF) {
 				this->root_ = new node_();
@@ -49,39 +49,6 @@ namespace mySTL
 			}
 		}
 
-		void insert(T&& key)
-		{
-			if (this->root_ == this->LEAF) {
-				this->root_ = new node_();
-				this->root_->key = key;
-				this->root_->color = color_::BLACK;
-				this->root_->left_node = this->LEAF;
-				this->root_->right_node = this->LEAF;
-				return;
-			}
-
-			node_* parent = this->LEAF;
-			node_** node = &this->root_;
-			while (true) {
-				if ((*node) == this->LEAF) {
-					*node = new node_();
-					(*node)->key = key;
-					(*node)->parent = parent;
-					(*node)->left_node = this->LEAF;
-					(*node)->right_node = this->LEAF;
-					this->fix_insert(*node);
-					return;
-				}
-
-				if (key <= (*node)->key) {
-					parent = *node;
-					node = &((*node)->left_node);
-					continue;
-				}
-				parent = *node;
-				node = &((*node)->right_node);
-			}
-		}
 	};
 
     template <typename T>
@@ -91,7 +58,7 @@ namespace mySTL
 	    typedef typename mySTL::bst<T, empty>::color_ color_;
 
     public:
-		void insert(T& key)
+		void insert(const T& key)
 		{
 			if (this->root_ == this->LEAF) {
 				this->root_ = new node_();
@@ -129,43 +96,6 @@ namespace mySTL
 			}
 		}
 
-		void insert(T&& key)
-		{
-			if (this->root_ == this->LEAF) {
-				this->root_ = new node_();
-				this->root_->key = key;
-				this->root_->color = color_::BLACK;
-				this->root_->left_node = this->LEAF;
-				this->root_->right_node = this->LEAF;
-				return;
-			}
-
-			node_* parent = this->LEAF;
-			node_** node = &this->root_;
-			while (true) {
-				if ((*node) == this->LEAF) {
-					*node = new node_();
-					(*node)->key = key;
-					(*node)->parent = parent;
-					(*node)->left_node = this->LEAF;
-					(*node)->right_node = this->LEAF;
-					this->fix_insert(*node);
-					return;
-				}
-
-				if (key == (*node)->key) {
-					return;
-				}
-
-				if (key < (*node)->key) {
-					parent = *node;
-					node = &((*node)->left_node);
-					continue;
-				}
-				parent = *node;
-				node = &((*node)->right_node);
-			}
-		}            
 	};
 }
 
