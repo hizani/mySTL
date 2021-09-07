@@ -36,28 +36,6 @@ namespace mySTL
 			}
 		}
 
-		void remove(const K&& key)
-		{
-			node_* node = this->root_;
-			while (true) {
-				if (node == LEAF) {
-					return;
-				}
-
-				if (node->key == key) {
-					remove_node(node);
-					return;
-				}
-
-				if (key <= node->key) {
-					node = node->left_node;
-					continue;
-				}
-
-				node = node->right_node;
-			}
-		}
-
 		void clear()
 		{
 			delete this->root_;
