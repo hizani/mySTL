@@ -1,12 +1,13 @@
 #include "set.h"
 #include "map.h"
+#include "vector.h"
 
 #include <iostream>
 int main()
 {
 	int num1 = 22;
 	int num2 = 11;
-	mySTL::multiset<int> *m = new mySTL::multiset<int>();
+	mySTL::multiset<int>* m = new mySTL::multiset<int>();
 	m->insert(num1);
 	m->insert(num2);
 	m->insert(14);
@@ -30,7 +31,7 @@ int main()
 
 	delete m;
 
-	mySTL::set<int> *s = new mySTL::set<int>();
+	mySTL::set<int>* s = new mySTL::set<int>();
 	s->insert(1);
 	s->insert(15);
 	s->insert(18);
@@ -52,4 +53,10 @@ int main()
 	map[1] = 5;
 	map[1] = 5;
 	std::cout << map[1] << std::endl;
+
+	mySTL::vector<int> vec;
+	vec.insert(10);
+	vec.insert(22);
+	vec.remove(0);
+	auto biba = vec[0];
 }
