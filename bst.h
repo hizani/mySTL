@@ -278,7 +278,6 @@ namespace mySTL
 				if (node->parent == grandparent->right_node) {
 					if (node == node->parent->left_node) {
 						node = node->parent;
-						//grandparent = get_grandparent(node);
 						rotate_right(node);
 					}
 
@@ -294,7 +293,6 @@ namespace mySTL
 
 				if (node == node->parent->right_node) {
 					node = node->parent;
-					//grandparent = get_grandparent(node);
 					rotate_left(node);
 				}
 

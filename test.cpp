@@ -1,6 +1,7 @@
 #include "set.h"
 #include "map.h"
 #include "vector.h"
+#include "list.h"
 
 #include <iostream>
 int main()
@@ -59,4 +60,20 @@ int main()
 	vec.insert(22);
 	vec.remove(0);
 	auto biba = vec[0];
+
+	mySTL::list<int> list;
+	list.push_front(1);
+	list.push_back(3);
+	list.push_back(5);
+	list.push_back(7);
+	list.push_back(22);
+	list.push_back(41);
+	list.push_back(58);
+
+	list.remove(100);
+	list.remove(4);
+	list.insert(505, 5);
+
+	std::cout << list[0] << std::endl;
+	std::cout << list[3] << std::endl;
 }

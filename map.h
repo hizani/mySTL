@@ -105,5 +105,6 @@ namespace mySTL
 			}
 		}
 	};
-} // namespace mySTL
+}
+
 #endif
