@@ -7,6 +7,7 @@ namespace mySTL
     class list
     {
     public:
+        // Insert new element at the end of the list.
         void push_back(const T& value)
         {
             node_* new_node = new node_(value, back_, nullptr);
@@ -17,7 +18,7 @@ namespace mySTL
                 front_ = new_node;
             length_++;
         }
-
+        // Insert new element at the begining of the list.
         void push_front(const T& value)
         {
             node_* new_node = new node_(value, nullptr, front_);
@@ -29,6 +30,7 @@ namespace mySTL
             length_++;
         }
 
+        // Insert new element by passed index.
         void insert(const T& value, const unsigned int index)
         {
             if(length_ <= index)
@@ -42,45 +44,30 @@ namespace mySTL
             node_* new_node = new node_(value);
 
             
-            node_* node = nullptr;
+            node_* node = traverse_to_idx(index);
 
-            switch (index < (length_ / 2))
-            {
-            case true:
-                node = front_;
-                for (int ii = 0; ii != index; ii++)
-                {
-                    node = node->next;
-                }
-                break;
-
-            case false:
-                node = back_;
-                for (int ii = (length_ - 1); ii != index; ii--)
-                {
-                    node = node->previous;
-                }
-                break;
-            }
-
+            // Insert new_node. 
             new_node->previous = node->previous;
             new_node->next = node;
 
+            // Change poiner of new_node->next.
             node->previous = new_node;
 
+            // Change poiner of new_node->previous.
             new_node->previous->next = new_node;
 
             length_++;
         }
 
+        // Remove last element from the list.
         void pop_back()
         {
             if(length_ <= 0)
                 return;
 
             back_ = back_->previous;
-            back_->next->previous = nullptr;
 
+            back_->next->previous = nullptr;
             delete back_->next;
 
             back_->next = nullptr;
@@ -88,14 +75,15 @@ namespace mySTL
             length_--;
         }
 
+        // Remove firts element of the list
         void pop_front()
         {
             if(length_ <= 0)
                 return;
 
             front_ = front_->next;
-            front_->previous->next = nullptr;
 
+            front_->previous->next = nullptr;
             delete front_->previous;
 
             front_->previous = nullptr;
@@ -103,6 +91,7 @@ namespace mySTL
             length_--;
         }
 
+        // Remove an element by passed index. 
         void remove(const unsigned int index)
         {
             if(length_ <= index)
@@ -118,26 +107,7 @@ namespace mySTL
                 return;
             }
 
-            node_* node = nullptr;
-
-            switch (index < (length_ / 2))
-            {
-            case true:
-                node = front_;
-                for (int ii = 0; ii != index; ii++)
-                {
-                    node = node->next;
-                }
-                break;
-
-            case false:
-                node = back_;
-                for (int ii = (length_ - 1); ii != index; ii--)
-                {
-                    node = node->previous;
-                }
-                break;
-            }
+            node_* node = traverse_to_idx(index);
 
             node->previous->next = node->next;
             node->next->previous = node->previous;
@@ -149,40 +119,31 @@ namespace mySTL
             length_--;
         }
 
+        // Return reference to the element by passed index.
         T& operator[](const unsigned int index)
         {
-            node_* node = nullptr;
-
-            switch (index < (length_ / 2))
-            {
-            case true:
-                node = front_;
-                for (int ii = 0; ii != index; ii++)
-                {
-                    node = node->next;
-                }
-                break;
-
-            case false:
-                node = back_;
-                for (int ii = (length_ - 1); ii != index; ii--)
-                {
-                    node = node->previous;
-                }
-                break;
-            }
+            node_* node = traverse_to_idx(index);
 
             return node->value;
         }
 
+        ~list()
+        {
+            if(front_ != nullptr)
+                delete front_;
+        }
+
     private:
 
+        // Node of the list.
         struct node_
         {
-            T value;
-            node_* previous;
-            node_* next;
+            T value;            // Value of the node.
+            node_* previous;    // Pointer to previous node.
+            node_* next;        // Pointer to next node.
 
+            // Create node with passed value
+            // and next and parevious pointerts of nullptr.
             node_(const T& value)
             {
                 this->value = value;
@@ -190,6 +151,8 @@ namespace mySTL
                 this->next = nullptr;
             }
 
+            // Create node with passed
+            // value, previous and next.
             node_(const T& value, node_* previous, node_* next)
             {
                 this->value = value;
@@ -206,10 +169,40 @@ namespace mySTL
             }
         };
 
-        node_* front_ = nullptr;
-        node_* back_ = nullptr;
 
-        unsigned int length_ = 0;
+        // Traverse the list from front or back to index element.
+        node_* traverse_to_idx(unsigned int index)
+        {
+            node_* node = nullptr;
+
+            switch (index < (length_ / 2))
+            {
+            // Traverse the list from front to back.
+            case true:
+                node = front_;
+                for (int ii = 0; ii != index; ii++)
+                {
+                    node = node->next;
+                }
+                break;
+
+            // Traverse the list from back to front.
+            case false:
+                node = back_;
+                for (int ii = (length_ - 1); ii != index; ii--)
+                {
+                    node = node->previous;
+                }
+                break;
+            }
+
+            return node;
+        }
+
+        node_* front_ = nullptr;    // First element of the list.
+        node_* back_ = nullptr;     // Last element of the list.
+
+        unsigned int length_ = 0;   // Length of the list.
     };
 
 }
