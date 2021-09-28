@@ -17,80 +17,86 @@ namespace mySTL
             capacity(cap);
         }
 
-        void insert(const T& value)
+        ~vector()
         {
-            if(capacity_ < end_ + 1)
-                capacity(capacity_ * 2);
-            array_[end_ + 1] = value;
-            end_++;
+            delete[] array_;
         }
 
+        // Insert new element to the vector.
+        void insert(const T& value)
+        {
+            // Reallocate array if the vector 
+            // is run out of capacity.
+            if (capacity_ < length_ + 1)
+                capacity(capacity_ * 2);
+            array_[length_ + 1] = value;
+            length_++;
+        }
+
+        // Remove element from vector.
         void remove(const unsigned int index)
         {
-            if(index == end_) {
-                end_--;
+            // Shift the end point of the vector
+            // if it is last element to be removed.
+            if (index == length_)
+            {
+                length_--;
                 return;
             }
 
-            /* TODO: Make first element delition without reallocation
-            
-            if(index == 0) {
-                delete array_[1] //clean first element
-                array_ = &array_[1];
-                end_--;
-                capacity_--;
-                return;
-            } */
-
             T* temp = new T[capacity_];
             int jj = -1;
-            for(int ii = 0; ii <= end_; ii++) {
+
+            // Save elements to the new array.
+            for (int ii = 0; ii <= length_; ii++)
+            {
                 jj++;
-                if(ii == index)
+                // Skip removing element.
+                if (ii == index)
                 {
                     jj--;
                     continue;
                 }
                 temp[jj] = array_[ii];
             }
-            end_--;
-            if(array_ != nullptr)
-                delete array_;
+            length_--;
+            if (array_ != nullptr)
+                delete[] array_;
             array_ = temp;
-
-           
         }
 
-        /* TODO: implement at() method */
-
+        // Get element of the vector by index. 
         T& operator[](const unsigned int index)
         {
             return array_[index];
         }
 
-        void capacity(const unsigned int number)
-        {
-            if(number == capacity_)
+        // Change vector's capacity.
+        void capacity(const int number)
+        {   
+            // Do nothing if new capacity is lower 
+            // than current length of the vector.
+            if ((length_ + number) <= capacity_)
                 return;
 
-            if(end_ > capacity_)
-                end_ = capacity_;
-
-            capacity_ = number;
+            capacity_ += number;
             T* temp = new T[number];
-            for(int ii = 0; ii <= end_; ii++) {
+            for (int ii = 0; ii <= length_; ii++)
+            {
                 temp[ii] = array_[ii];
             }
-            if(array_ != nullptr)
-                delete array_;
+            if (array_ != nullptr)
+                delete[] array_;
             array_ = temp;
         }
 
     private:
-        unsigned int capacity_ = -1;
-        int end_ = -1;
-        T* array_ = nullptr;    
-
+        // Capacity of the vector,
+        int capacity_ = -1;
+        // Length of the vector.
+        int length_ = -1;
+        // Array with elements of the vector.
+        T* array_ = nullptr;
     };
 }
 
