@@ -7,11 +7,14 @@ namespace mySTL
     class vector
     {
     public:
+
+        // Create vector with capacity of 10
         vector()
         {
             capacity(10);
         }
 
+        // Create vector with capacity of cap
         vector(const unsigned int cap)
         {
             capacity(cap);
@@ -65,7 +68,7 @@ namespace mySTL
             array_ = temp;
         }
 
-        // Get element of the vector by index. 
+        // Return reference to the element by passed index.
         T& operator[](const unsigned int index)
         {
             return array_[index];
@@ -91,12 +94,9 @@ namespace mySTL
         }
 
     private:
-        // Capacity of the vector,
-        int capacity_ = -1;
-        // Length of the vector.
-        int length_ = -1;
-        // Array with elements of the vector.
-        T* array_ = nullptr;
+        int capacity_ = -1;     // Capacity of the vector.
+        int length_ = -1;       // Length of the vector.
+        T* array_ = nullptr;    // Array with elements of the vector.
     };
 }
 
