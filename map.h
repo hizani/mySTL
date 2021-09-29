@@ -12,6 +12,7 @@ namespace mySTL
 
     public:
 
+		// Insert new node with passed key and value.
 		virtual void insert(const K& key, const V& value)
 		{
 			if (this->root_ == this->LEAF) {
@@ -65,6 +66,7 @@ namespace mySTL
 
 
 		public:
+		// Insert new node with passed key and value.
 		void insert(const K& key, const V& value) override
 		{
 			if (this->root_ == this->LEAF) {
