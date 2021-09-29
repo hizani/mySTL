@@ -5,6 +5,7 @@
 
 namespace mySTL
 {
+	// Empty struct to represent a lack of value in sets.
 	struct empty {};
 
     template <typename T>
@@ -15,6 +16,7 @@ namespace mySTL
 
     public:
 
+		// Insert new node with passed key.
 		void insert(const T& key)
 		{
 			if (this->root_ == this->LEAF) {
@@ -58,6 +60,7 @@ namespace mySTL
 	    typedef typename mySTL::bst<T, empty>::color_ color_;
 
     public:
+		// Insert new node with passed key.
 		void insert(const T& key)
 		{
 			if (this->root_ == this->LEAF) {
