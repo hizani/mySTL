@@ -7,6 +7,7 @@ namespace mySTL
     class bst
     {
     public:
+		// Return true if contains key.
 		bool contains(const K& key)
 		{
 			if (find(key) != nullptr)
@@ -14,6 +15,7 @@ namespace mySTL
 			return false;
 		}
 
+		// Remove node by key value.
 		void remove(const K& key)
 		{
 			node_* node = this->root_;
@@ -36,6 +38,7 @@ namespace mySTL
 			}
 		}
 
+		// Clear the bst.
 		void clear()
 		{
 			delete this->root_;
@@ -59,20 +62,25 @@ namespace mySTL
 			delete this->root_;
 		}
 
+		// Colors of nodes for red-black 
+		// bst implementation.
         enum color_
 		{
 			BLACK,
 			RED
 		};
 
+		// Node of bst.
         struct node_
 		{
 			K key;
             V value;
 
-			node_* left_node;
-			node_* right_node;
-			node_* parent;
+			node_* left_node; 	// Left child.
+			node_* right_node;	// Right child.
+			node_* parent;		// Parent of a node.
+
+			color_ color = RED;	// color of a node
 
 			~node_()
 			{
@@ -82,13 +90,13 @@ namespace mySTL
 					delete right_node;
 			}
 
-			color_ color = RED;
 		};
         
         
-		node_* root_;
-		node_* LEAF;
+		node_* root_;	// First node of a bst.
+		node_* LEAF; 	// Leaf of a bst.
 
+		// Return pointer to bst node with passed key. 
 		node_* find(const K& key)
 		{
 			node_* node = this->root_;
@@ -110,6 +118,7 @@ namespace mySTL
 			}
 		}
 
+		// Return true if passed node is red.
 		bool is_red(node_* node)
 		{
 			if (node->color == RED)
@@ -117,6 +126,7 @@ namespace mySTL
 			return false;
 		}
 
+		// Replace node1 with node2.
 		void replace_node(node_* node1, node_* node2) {
 			if (node1->parent == nullptr)
 			{
@@ -133,11 +143,13 @@ namespace mySTL
 			node2->parent = node1->parent;
 		}
 
+		// Remove passed node and find
+		// fix_node on which balancing will be carried out.
 		void remove_node(node_* node)
 		{
-			node_* fix_node;
-			node_* minimum_node = node;
-			color_ node_color = minimum_node->color;
+			node_* fix_node;							// Node to be balanced.
+			node_* minimum_node = node; 				// Minimum node (not leaf) of the removing node subtree.
+			color_ node_color = minimum_node->color;	// Minimum node color.
 			if (node->left_node == LEAF) {
 				fix_node = node->right_node;
 				replace_node(node, node->right_node);
@@ -172,12 +184,14 @@ namespace mySTL
 			if (node_color == BLACK)
 				fix_remove(fix_node);
 		}
-
+		
+		// Return pointer to a grandparent of passed node.
 		node_* get_grandparent(node_* node)
 		{
 			return node->parent->parent;
 		}
 
+		// Return pointer to a uncle of passed node.
 		node_* get_uncle(node_* node)
 		{
 			node_* grandparent = get_grandparent(node);
@@ -186,6 +200,7 @@ namespace mySTL
 			return grandparent->left_node;
 		}
 
+		// Return pointer to a sibling of passed node.
 		node_* get_sibling(node_* node)
 		{
 			if (node->parent->left_node == node)
@@ -193,6 +208,7 @@ namespace mySTL
 			return node->parent->left_node;
 		}
 
+		// Change color of passed node to opposite.
 		void flip_color(node_* node)
 		{
 			if (is_red(node))
@@ -203,6 +219,7 @@ namespace mySTL
 			node->color = RED;
 		}
 
+		// Return true if passed node is root of a bst.
 		bool is_root(node_* node)
 		{
 			if (node == root_) {
@@ -211,6 +228,10 @@ namespace mySTL
 			return false;
 		}
 
+		// Rotate passed node to the left.
+		//
+		// Passed node moves to the node->right_node's place and
+		// node->left_node moves to the passed node's place.
 		void rotate_left(node_* node)
 		{
 			node_* node_to_rotate = node->right_node;
@@ -233,6 +254,10 @@ namespace mySTL
 			node->parent = node_to_rotate;
 		}
 
+		// Rotate passed node to the right.
+		//
+		// Passed node moves to the node->left_node's place and
+		// node->right_node moves to the passed node's place.
 		void rotate_right(node_* node)
 		{
 			node_* node_to_rotate = node->left_node;
@@ -255,6 +280,7 @@ namespace mySTL
 			node->parent = node_to_rotate;
 		}
 
+		// Make tree to be balanced after insert.
 		void fix_insert(node_* node)
 		{
 			node_* uncle;
@@ -273,8 +299,6 @@ namespace mySTL
 					continue;
 				}
 
-				// Parent is right child of grandparent
-
 				if (node->parent == grandparent->right_node) {
 					if (node == node->parent->left_node) {
 						node = node->parent;
@@ -288,8 +312,6 @@ namespace mySTL
 					if (is_root(node)) break;
 					continue;
 				}
-
-				// Parent is left child of grandparent
 
 				if (node == node->parent->right_node) {
 					node = node->parent;
@@ -306,6 +328,7 @@ namespace mySTL
 			root_->color = BLACK;
 		}
 
+		// Make tree to be balanced after remove.
 		void fix_remove(node_* node)
 		{
 			while (node != root_ && !is_red(node))
